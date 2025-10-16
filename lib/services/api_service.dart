@@ -1,10 +1,11 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/movie.dart';
 
 class ApiService {
   static const String _baseUrl = 'https://www.omdbapi.com/';
-  static const String _apiKey = '***REDACTED***';
+  static final String _apiKey = dotenv.env['OMDB_API_KEY'] ?? '';
 
   Future<MovieSearchResponse> searchMovies(String query, {int page = 1}) async {
     try {
