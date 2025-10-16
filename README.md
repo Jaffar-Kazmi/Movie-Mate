@@ -87,7 +87,6 @@ lib/
     - Register for a free API key
     - Create **.env** file in your project root folder
       ```
-      // .env
       OMDB_API_KEY=your_api_key
       ```
     - Replace `your_api_key` with your actual API key
