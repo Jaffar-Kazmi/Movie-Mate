@@ -37,7 +37,7 @@ class MovieWatchlistApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Movie Watchlist',
+      title: 'Movie Mate',
       theme: AppTheme.darkTheme,
       home: const MainScreen(),
       debugShowCheckedModeBanner: false,
