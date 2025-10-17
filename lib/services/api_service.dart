@@ -2,6 +2,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/movie.dart';
+import 'dart:math';
 
 class ApiService {
   static const String _baseUrl = 'https://www.omdbapi.com/';
@@ -61,26 +62,20 @@ class ApiService {
   }
 
   Future<List<Movie>> getTrendingMovies() async {
-    // Use broader queries to get more movies per search
-    final queries = ['avengers', 'batman', 'star wars', 'marvel', 'disney', 'mission', 'transformers', 'spider', 'toy', 'matrix'];
+    final queries = ['avengers', 'batman', 'star wars', 'marvel', 'disney', 'mission','the lord of rings', 'transformers', 'spider', 'toy', 'matrix', 'harry potter'];
+    queries.shuffle(Random()); // Shuffle for randomness
     final List<Movie> trendingMovies = [];
+    final random = Random();
 
     for (final query in queries) {
-      final response = await searchMovies(query, page: 1);
+      int randomPage = 1 + random.nextInt(5); // Randomly pick page 1 or 2
+      final response = await searchMovies(query, page: randomPage);
       if (response.response && response.movies.isNotEmpty) {
         trendingMovies.addAll(response.movies);
         if (trendingMovies.length >= 25) break;
       }
-      // Try page 2 for more results if needed
-      if (trendingMovies.length < 25) {
-        final response2 = await searchMovies(query, page: 2);
-        if (response2.response && response2.movies.isNotEmpty) {
-          trendingMovies.addAll(response2.movies);
-          if (trendingMovies.length >= 25) break;
-        }
-      }
     }
-    // Remove duplicates and limit to 25
+    // Remove duplicates, limit to 25
     final uniqueMovies = <String, Movie>{};
     for (final movie in trendingMovies) {
       uniqueMovies[movie.imdbID] = movie;
