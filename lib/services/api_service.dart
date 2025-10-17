@@ -61,24 +61,32 @@ class ApiService {
   }
 
   Future<List<Movie>> getTrendingMovies() async {
-    // Since OMDb doesn't have a trending endpoint, we'll search for popular movies
-    final queries = ['avengers', 'batman', 'star wars', 'marvel', 'disney'];
+    // Use broader queries to get more movies per search
+    final queries = ['avengers', 'batman', 'star wars', 'marvel', 'disney', 'mission', 'transformers', 'spider', 'toy', 'matrix'];
     final List<Movie> trendingMovies = [];
 
     for (final query in queries) {
-      final response = await searchMovies(query);
+      final response = await searchMovies(query, page: 1);
       if (response.response && response.movies.isNotEmpty) {
-        // Take first 2 movies from each search to create a diverse trending list
-        trendingMovies.addAll(response.movies.take(2));
+        trendingMovies.addAll(response.movies);
+        if (trendingMovies.length >= 25) break;
+      }
+      // Try page 2 for more results if needed
+      if (trendingMovies.length < 25) {
+        final response2 = await searchMovies(query, page: 2);
+        if (response2.response && response2.movies.isNotEmpty) {
+          trendingMovies.addAll(response2.movies);
+          if (trendingMovies.length >= 25) break;
+        }
       }
     }
-
-    // Remove duplicates and return up to 10 movies
+    // Remove duplicates and limit to 25
     final uniqueMovies = <String, Movie>{};
     for (final movie in trendingMovies) {
       uniqueMovies[movie.imdbID] = movie;
+      if (uniqueMovies.length >= 25) break;
     }
-
-    return uniqueMovies.values.take(10).toList();
+    return uniqueMovies.values.toList();
   }
+
 }
