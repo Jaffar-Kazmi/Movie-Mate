@@ -108,19 +108,19 @@ class _AnimatedMovieGridState extends State<AnimatedMovieGrid> {
   Widget _buildGridView() {
     return AnimationLimiter(
       child: GridView.builder(
-        padding: const EdgeInsets.all(4), // Reduced padding
+        padding: const EdgeInsets.all(2), // Minimal padding
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3, // Changed from 2 to 3 cards per row
-          childAspectRatio: 0.6, // Changed from 0.7 to 0.6 for more compact cards
-          crossAxisSpacing: 4, // Reduced spacing
-          mainAxisSpacing: 4, // Reduced spacing
+          crossAxisCount: 5, // 5 movie cards per row
+          childAspectRatio: 0.52, // Tall, slim cards
+          crossAxisSpacing: 2,
+          mainAxisSpacing: 2,
         ),
         itemCount: widget.movies.length,
         itemBuilder: (context, index) {
           return AnimationConfiguration.staggeredGrid(
             position: index,
             duration: const Duration(milliseconds: 375),
-            columnCount: 3, // Updated to match crossAxisCount
+            columnCount: 5,
             child: ScaleAnimation(
               child: FadeInAnimation(
                 child: MovieCard(
